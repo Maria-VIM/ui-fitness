@@ -165,13 +165,18 @@
 
 .exercise-badges {
   display: flex;
-  flex-wrap: wrap;
   gap: 8px;
+  flex-wrap: nowrap;
+  overflow: hidden;
 }
 
 
 .exercise-badge {
   display: inline-flex;
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
   align-items: center;
   justify-content: center;
   font-weight: 600;
@@ -206,6 +211,7 @@
   padding: 0 14px 14px;
 }
 
+.action-btn,
 .plus-btn,
 .delete-btn,
 .edit-btn {
@@ -221,6 +227,22 @@
   transition:
     background 0.2s ease,
     color 0.2s ease;
+}
+
+.action-btn {
+  background: #fafff1;
+  color: #62bd34;
+}
+
+.action-btn.disabled {
+  background: #aeaeae;
+  color: white;
+}
+
+
+.action-btn.disabled:hover {
+  background: #aeaeae;
+  color: white;
 }
 
 .plus-btn {

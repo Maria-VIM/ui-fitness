@@ -3,8 +3,8 @@ import LoginPage from '@/modules/auth/views/LoginPage.vue'
 
 const authRoutes: RouteRecordRaw[] = [
   {
-    path: '/login',
-    name: 'login',
+    path: '/auth',
+    name: 'auth',
     component: LoginPage,
   },
 ]

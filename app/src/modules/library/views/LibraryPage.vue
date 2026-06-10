@@ -1,13 +1,16 @@
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
 import VimTitle from '@/shared/components/VimTitle.vue'
-import { useQuery } from '@tanstack/vue-query'
+import { keepPreviousData, useQuery } from '@tanstack/vue-query'
 import { GROUP_API } from '@/modules/library/api/groups.ts'
 import { CATEGORY_API } from '@/modules/library/api/categories.ts'
 import { EXERCISE_API } from '@/modules/library/api/exercises.ts'
+import { useRouter } from 'vue-router'
 
 const selectedGroupId = ref<number | null>(null)
 const selectedCategoryId = ref<number | null>(null)
+
+const router = useRouter()
 
 const baseUrl = import.meta.env.VITE_BASE_URL
 
@@ -27,6 +30,7 @@ const { data: exercisesData } = useQuery({
   queryFn: () => {
     return EXERCISE_API.get(selectedCategoryId.value ?? undefined)
   },
+  placeholderData: keepPreviousData,
 })
 
 watch(selectedCategoryId, (value) => {
@@ -36,16 +40,13 @@ watch(selectedCategoryId, (value) => {
 <template>
   <div class="page">
     <VimTitle title="Библиотека упражнений" />
-
     <div class="filters">
       <select v-model="selectedGroupId" class="filter-select" @change="selectedCategoryId = null">
         <option :value="null">Группа упражнений</option>
-
         <option v-for="group in groupData ?? []" :key="group.id" :value="group.id">
           {{ group.name }}
         </option>
       </select>
-
       <select v-model="selectedCategoryId" class="filter-select" :disabled="!selectedGroupId">
         <option :value="null">Категория упражнений</option>
 
@@ -54,7 +55,6 @@ watch(selectedCategoryId, (value) => {
         </option>
       </select>
     </div>
-
     <div class="exercises-grid">
       <div v-for="exercise in exercisesData ?? []" :key="exercise.id" class="exercise-card">
         <div class="exercise-image">
@@ -64,7 +64,6 @@ watch(selectedCategoryId, (value) => {
             :alt="exercise.title"
           />
         </div>
-
         <div class="exercise-body">
           <div class="exercise-badges">
             <span v-for="category in exercise.categories" :key="category" class="exercise-badge">
@@ -80,7 +79,11 @@ watch(selectedCategoryId, (value) => {
           </p>
         </div>
         <div class="exercise-actions">
-          <button class="edit-btn" style="width: 50%; gap: 10px">
+          <button
+            class="edit-btn"
+            style="width: 50%; gap: 10px"
+            @click="router.push(`/library/exercise/${exercise.id}`)"
+          >
             <svg
               class="w-6 h-6 text-gray-800 dark:text-white"
               aria-hidden="true"

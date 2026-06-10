@@ -6,6 +6,7 @@ const adminRoutes: RouteRecordRaw[] = [
     path: '/admin',
     name: 'admin',
     component: AdminPage,
+    meta: { requiresAuth: true },
   },
 ]
 

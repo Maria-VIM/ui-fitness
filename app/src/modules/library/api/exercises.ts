@@ -9,4 +9,12 @@ export const EXERCISE_API = {
     })
     return response.data
   },
+
+  async getOne(id: number) {
+    const response = await instance({
+      method: 'GET',
+      url: `/exercises/${id}`,
+    })
+    return response.data
+  },
 }

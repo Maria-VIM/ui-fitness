@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import { useUiStore } from '@/shared/stores/ui'
+import { useAuthStore } from '@/modules/auth/store'
 
 const ui = useUiStore()
+const auth = useAuthStore()
 
 const menuItems = [
-  { label: 'Главная', link: '/', icon: 'home' },
-  { label: 'Личный план', link: '/personal', icon: 'plan' },
-  { label: 'Библиотека', link: '/library', icon: 'library' },
-  { label: 'Админ-панель', link: '/admin', icon: 'admin' },
+  { label: 'Главная', link: '/home', icon: 'home', needAdmin: false },
+  { label: 'Личный план', link: '/personal', icon: 'plan', needAdmin: false },
+  { label: 'Библиотека', link: '/library', icon: 'library', needAdmin: false },
+  { label: 'Админ-панель', link: '/admin', icon: 'admin', needAdmin: true },
 ]
 
 const icons = {
@@ -25,7 +27,7 @@ const icons = {
   <div :class="['sidebar', { open: !ui.is_mobile }]">
     <ul class="menu">
       <li :class="['li', { open: !ui.is_mobile }]" v-for="(item, index) in menuItems" :key="index">
-        <router-link :to="item.link" class="full-link">
+        <router-link :to="item.link" class="full-link" v-if="!item.needAdmin || auth.isAdmin">
           <div :class="['icon-wrapper', { open: !ui.is_mobile }]" v-html="icons[item.icon]"></div>
           <span v-if="!ui.is_mobile">{{ item.label }}</span>
         </router-link>

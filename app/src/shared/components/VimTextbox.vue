@@ -3,6 +3,7 @@ import { computed } from 'vue'
 
 const props = defineProps<{
   type: string
+  isInvalid?: boolean
   modelValue?: string | number
   label?: string
   min?: number
@@ -12,19 +13,21 @@ defineEmits<{
   (e: 'update:modelValue', value: string): void
 }>()
 
+const inputId = computed(() => `input-${(props.label ?? '').replace(/\s+/g, '-').toLowerCase()}`)
 const hasValue = computed(() => !!props.modelValue)
 </script>
 
 <template>
   <div class="input-wrapper">
     <input
-      :id="`input-${label}`"
+      :id="inputId"
       class="vimBoxInput"
       :placeholder="hasValue ? '' : label"
       :type="props.type"
       :min="props.min"
       :max="props.max"
       :value="props.modelValue"
+      :class="{ 'vimBoxInput--invalid': isInvalid }"
       @input="$emit('update:modelValue', ($event.target as HTMLInputElement).value)"
     />
     <label
@@ -85,5 +88,15 @@ const hasValue = computed(() => !!props.modelValue)
   transform: translateY(-50%);
   font-size: 12px;
   color: #2a9d8f;
+}
+
+.vimBoxInput--invalid {
+  border-color: #dc2626;
+}
+
+.vimBoxInput--invalid:focus {
+  border-color: #b91c1c;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.2);
+  background-color: #ffffff;
 }
 </style>

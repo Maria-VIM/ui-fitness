@@ -1,11 +1,11 @@
 <script setup lang="ts">
-
-import VimTitle from "@/shared/components/VimTitle.vue";
-import WgAuthTabs from "@/modules/auth/components/WgAuthTabs.vue";
+import VimTitle from '@/shared/components/VimTitle.vue'
+import WgAuthTabs from '@/modules/auth/widgets/WgAuthTabs.vue'
 </script>
 
 <template>
-  <VimTitle title="Wellness Fitness. Позаботься о себе"/>
-  <WgAuthTabs/>
+  <div class="page">
+    <VimTitle title="Wellness Fitness. Позаботься о себе" />
+    <WgAuthTabs />
+  </div>
 </template>
-

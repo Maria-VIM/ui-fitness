@@ -1,15 +1,21 @@
 <script setup lang="ts">
 import VimMenu from '@/shared/components/VimMenu.vue'
 import VimHeader from '@/shared/components/VimHeader.vue'
-import { ref } from 'vue'
-const is_login = ref<boolean>(true)
+import { computed } from 'vue'
+import { useRoute } from 'vue-router'
+
+const route = useRoute()
+
+const isAuthRoute = computed(() => {
+  return route.path.includes('auth')
+})
 </script>
 
 <template>
   <div class="layout">
-    <VimHeader />
+    <VimHeader v-if="!isAuthRoute" />
     <div class="main-content">
-      <VimMenu v-if="is_login" :key="'menu'" />
+      <VimMenu v-if="!isAuthRoute" />
       <div class="content" :key="'content'">
         <transition name="fade" mode="out-in">
           <router-view />
