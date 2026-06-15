@@ -80,6 +80,9 @@ const hasValue = computed(() => !!props.modelValue)
 .floating-label--active {
   top: 0;
   transform: translateY(-50%);
+  border: 1px solid #2a9d8f;
+  border-radius: 4px;
+  width: 30%;
   font-size: 12px;
   color: #2a9d8f;
 }
@@ -87,6 +90,9 @@ const hasValue = computed(() => !!props.modelValue)
 .vimBoxTextarea:focus ~ .floating-label {
   top: 0;
   transform: translateY(-50%);
+  border: 1px solid #2a9d8f;
+  border-radius: 4px;
+  width: 30%;
   font-size: 12px;
   color: #2a9d8f;
 }

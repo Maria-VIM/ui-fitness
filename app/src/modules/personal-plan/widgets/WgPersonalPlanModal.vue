@@ -2,7 +2,7 @@
 import VimSidebar from '@/shared/components/VimSidebar.vue'
 import VimTextbox from '@/shared/components/VimTextbox.vue'
 import { ref } from 'vue'
-import type { WorkoutFormInterface } from '@/modules/personal-plan/interfaces/workout-form.interface.ts'
+import type { WorkoutFormInterface } from '@/modules/personal-plan/interfaces/workouts/workout-form.interface.ts'
 import { useMutation, useQueryClient } from '@tanstack/vue-query'
 import WORKOUTS_API from '@/modules/personal-plan/api/workouts.ts'
 import type { DaysOfWeek } from '@/shared/enums/daysOfWeek.enum.ts'

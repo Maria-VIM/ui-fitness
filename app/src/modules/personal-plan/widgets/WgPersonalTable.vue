@@ -81,10 +81,10 @@ const { mutate: deleteWorkout } = useMutation({
         <button
           class="action-btn"
           :class="{
-            disabled: !(workout.daysOfWeek ?? '').includes(dayName),
+            disabled: !(workout.daysOfWeek ?? '').includes(dayName) || workout.completedToday,
           }"
           :disabled="!(workout.daysOfWeek ?? '').includes(dayName)"
-          @click="router.push(`workout/${workout.id}`)"
+          @click="router.push(`/personal/workout/${workout.id}`)"
         >
           <svg
             class="w-6 h-6 text-gray-800 dark:text-white"
@@ -159,5 +159,26 @@ const { mutate: deleteWorkout } = useMutation({
   color: #4f46e5;
   font-size: 12px;
   font-weight: 500;
+}
+
+@media (max-width: 480px) {
+  .group-item {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn-groups {
+    margin-top: 20px;
+    justify-content: flex-end;
+    width: 100%;
+  }
+
+  .title {
+    font-size: 18px;
+  }
+
+  .day-badge {
+    font-size: 11px;
+  }
 }
 </style>

@@ -8,6 +8,8 @@ import { AUTH_API } from '@/modules/auth/api/auth.ts'
 import type { AxiosError } from 'axios'
 import VimSnackBar from '@/shared/components/VimSnackBar.vue'
 
+const router = useRouter()
+
 const againPassword = ref<string>('')
 
 const snackText = ref<string>('')
@@ -93,14 +95,12 @@ const { mutate: createAccount, isPending } = useMutation({
 
 const { mutate: verifyAccount } = useMutation({
   mutationFn: () => AUTH_API.confirmAccount(form.value.email, confirmCode.value),
-
   onSuccess() {
-    snackText.value = 'Аккаунт подтвержден'
-    isSnackBarView.value = true
     if (timerInterval) {
       clearInterval(timerInterval)
       timerInterval = null
     }
+    router.push('/auth?name=login')
   },
 
   onError() {
@@ -153,6 +153,8 @@ function handleCreateAccount(): void {
   createAccount()
 }
 import { onUnmounted } from 'vue'
+import Router from '@/router'
+import { useRouter } from 'vue-router'
 onUnmounted(() => {
   if (timerInterval) {
     clearInterval(timerInterval)

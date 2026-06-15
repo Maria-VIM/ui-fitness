@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import {
   Dumbbell,
   CalendarDays,
@@ -10,29 +10,48 @@ import {
 } from 'lucide-vue-next'
 import VimTitle from '@/shared/components/VimTitle.vue'
 import { useRouter } from 'vue-router'
+import type { WorkoutSessionStatisticInterface } from '@/modules/personal-plan/interfaces/passing/workout-session-statistics.interface.ts'
+import { useQuery } from '@tanstack/vue-query'
+import { PASSING_API } from '@/modules/personal-plan/api/passing.ts'
+import { STATES_API } from '@/modules/home/api/states.ts'
 
 const router = useRouter()
 
-const stats = [
+const { data: totalSessions } = useQuery({
+  queryKey: ['workouts', 'total'],
+  queryFn: STATES_API.getTotalSession,
+})
+
+const { data: activeTotal } = useQuery({
+  queryKey: ['workouts', 'active', 'total'],
+  queryFn: STATES_API.getActiveTotal,
+})
+
+const { data: totalPlans } = useQuery({
+  queryKey: ['workout', 'session', 'total'],
+  queryFn: STATES_API.getTotalPlans,
+})
+
+const stats = computed(() => [
   {
     title: 'Тренировок',
-    value: 24,
-    subtitle: '',
+    value: activeTotal.value ?? 0,
+    subtitle: 'сегодня',
     icon: Dumbbell,
   },
   {
     title: 'Сессий',
-    value: 18,
+    value: totalSessions.value ?? 0,
     subtitle: 'завершено',
     icon: CalendarDays,
   },
   {
     title: 'Планов упражнений',
-    value: 4,
+    value: totalPlans.value ?? 0,
     subtitle: 'активный',
     icon: ClipboardList,
   },
-]
+])
 
 const quickAccess = [
   {
@@ -49,29 +68,35 @@ const quickAccess = [
   },
 ]
 
-const chartData = [
-  { day: 'Пн', value: 12 },
-  { day: 'Вт', value: 18 },
-  { day: 'Ср', value: 15 },
-  { day: 'Чт', value: 24 },
-  { day: 'Пт', value: 30 },
-  { day: 'Сб', value: 22 },
-  { day: 'Вс', value: 34 },
-]
+const { data: statistics = ref<WorkoutSessionStatisticInterface[]>([]) } = useQuery({
+  queryKey: ['passing-statistics'],
+  queryFn: () => PASSING_API.getStatistics(),
+})
+
+const chartData = computed(() => {
+  return (statistics.value ?? []).map((item) => ({
+    day: new Date(item.date).toLocaleDateString('ru-RU', {
+      day: '2-digit',
+      month: '2-digit',
+    }),
+    value: item.total,
+  }))
+})
 
 const chartWidth = 800
 const chartHeight = 260
 const padding = 40
 
-const maxValue = Math.max(...chartData.map((d) => d.value))
+const maxValue = computed(() => Math.max(...chartData.value.map((d) => d.value), 1))
 
 const points = computed(() => {
-  return chartData
+  if (!chartData.value.length) return ''
+
+  return chartData.value
     .map((item, index) => {
-      const x = padding + (index * (chartWidth - padding * 2)) / (chartData.length - 1)
-
-      const y = chartHeight - padding - (item.value / maxValue) * (chartHeight - padding * 2)
-
+      const x =
+        padding + (index * (chartWidth - padding * 2)) / Math.max(chartData.value.length - 1, 1)
+      const y = chartHeight - padding - (item.value / maxValue.value) * (chartHeight - padding * 2)
       return `${x},${y}`
     })
     .join(' ')
@@ -166,7 +191,9 @@ const points = computed(() => {
 
           <template v-for="(item, index) in chartData" :key="item.day">
             <circle
-              :cx="padding + (index * (chartWidth - padding * 2)) / (chartData.length - 1)"
+              :cx="
+                padding + (index * (chartWidth - padding * 2)) / Math.max(chartData.length - 1, 1)
+              "
               :cy="chartHeight - padding - (item.value / maxValue) * (chartHeight - padding * 2)"
               r="6"
               fill="#8EB48D"

@@ -8,11 +8,13 @@ const emit = defineEmits(['edit', 'delete'])
 
 <template>
   <div class="plan-item">
+    <div class="plan-order">
+      {{ plan.orderIndex }}
+    </div>
     <div class="plan-content">
       <div class="plan-title">
         {{ plan.title }}
       </div>
-
       <div class="plan-info">{{ plan.sets }} подходов × {{ plan.reps }} повторений</div>
     </div>
 
@@ -64,15 +66,40 @@ const emit = defineEmits(['edit', 'delete'])
 .plan-item {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 12px;
+
+  width: 100%;
+  box-sizing: border-box;
 
   padding: 16px;
+
   border: 1px solid #e5e7eb;
   border-radius: 12px;
   background: #fff;
+
+  transition:
+    box-shadow 0.2s ease,
+    transform 0.2s ease;
+}
+
+.plan-item:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.plan-order {
+  flex-shrink: 0;
+
+  min-width: 24px;
+
+  font-size: 13px;
+  font-weight: 600;
+  color: #9ca3af;
 }
 
 .plan-content {
+  flex: 1;
+  min-width: 0;
+
   display: flex;
   flex-direction: column;
   gap: 4px;
@@ -80,7 +107,12 @@ const emit = defineEmits(['edit', 'delete'])
 
 .plan-title {
   font-size: 16px;
-  font-weight: 400;
+  font-weight: 500;
+  color: #111827;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .plan-info {
@@ -91,6 +123,7 @@ const emit = defineEmits(['edit', 'delete'])
 .btn-group {
   display: flex;
   gap: 8px;
+  flex-shrink: 0;
 }
 
 .edit-btn,
@@ -99,12 +132,22 @@ const emit = defineEmits(['edit', 'delete'])
   align-items: center;
   justify-content: center;
 
-  width: 36px;
-  height: 36px;
+  width: 40px;
+  height: 40px;
 
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
+
   cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    transform 0.2s ease;
+}
+
+.edit-btn:hover,
+.delete-btn:hover {
+  transform: scale(1.05);
 }
 
 .edit-btn {
@@ -113,5 +156,98 @@ const emit = defineEmits(['edit', 'delete'])
 
 .delete-btn {
   background: #fef2f2;
+}
+
+.edit-btn svg,
+.delete-btn svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* ========================= */
+/* Планшеты */
+/* ========================= */
+
+@media (max-width: 768px) {
+  .plan-item {
+    padding: 12px;
+    gap: 10px;
+  }
+
+  .plan-order {
+    min-width: 20px;
+    font-size: 12px;
+  }
+
+  .plan-title {
+    font-size: 15px;
+  }
+
+  .plan-info {
+    font-size: 13px;
+  }
+
+  .btn-group {
+    gap: 6px;
+  }
+
+  .edit-btn,
+  .delete-btn {
+    width: 36px;
+    height: 36px;
+  }
+
+  .edit-btn svg,
+  .delete-btn svg {
+    width: 18px;
+    height: 18px;
+  }
+}
+
+/* ========================= */
+/* Телефоны */
+/* ========================= */
+
+@media (max-width: 480px) {
+  .plan-item {
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 8px;
+  }
+
+  .plan-order {
+    margin-top: 2px;
+  }
+
+  .plan-content {
+    flex: 1;
+  }
+
+  .plan-title {
+    white-space: normal;
+    overflow: visible;
+    text-overflow: unset;
+    line-height: 1.3;
+  }
+
+  .btn-group {
+    width: 100%;
+    justify-content: flex-end;
+    margin-top: 6px;
+    padding-top: 6px;
+    border-top: 1px solid #f3f4f6;
+  }
+
+  .edit-btn,
+  .delete-btn {
+    width: 34px;
+    height: 34px;
+  }
+
+  .edit-btn svg,
+  .delete-btn svg {
+    width: 16px;
+    height: 16px;
+  }
 }
 </style>

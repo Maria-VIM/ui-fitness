@@ -147,7 +147,7 @@ const { data: exercisesData } = useQuery({
 })
 
 const { data: exerciseOneData } = useQuery({
-  queryKey: ['exercises', selectedExercisesId],
+  queryKey: ['exercises', 'all', selectedExercisesId],
   queryFn: () => {
     return EXERCISE_API.getOne(selectedExercisesId.value)
   },
@@ -318,7 +318,7 @@ watch(exerciseOneData, (newValue) => {
               :alt="exercise.title"
               class="exercise-image"
             />
-            <div v-else class="exercise-placeholder">🏋️</div>
+            <div v-else class="exercise-placeholder"></div>
           </div>
         </div>
 

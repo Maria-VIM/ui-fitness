@@ -49,7 +49,8 @@ export const useAuthStore = defineStore('auth', {
         return null
       }
     },
-    async checkAuth() {
+    async checkAuth(): Promise<LoginUserInterface | null> {
+      if (this.user) return this.user
       return await this.getCurrentUser()
     },
   },

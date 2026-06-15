@@ -1,8 +1,6 @@
 <script setup lang="ts">
-import { useUiStore } from '@/shared/stores/ui'
 import { useAuthStore } from '@/modules/auth/store'
 
-const ui = useUiStore()
 const auth = useAuthStore()
 
 const menuItems = [
@@ -24,106 +22,167 @@ const icons = {
 </script>
 
 <template>
-  <div :class="['sidebar', { open: !ui.is_mobile }]">
+  <nav class="sidebar">
     <ul class="menu">
-      <li :class="['li', { open: !ui.is_mobile }]" v-for="(item, index) in menuItems" :key="index">
-        <router-link :to="item.link" class="full-link" v-if="!item.needAdmin || auth.isAdmin">
-          <div :class="['icon-wrapper', { open: !ui.is_mobile }]" v-html="icons[item.icon]"></div>
-          <span v-if="!ui.is_mobile">{{ item.label }}</span>
+      <li v-for="(item, index) in menuItems" :key="index" v-show="!item.needAdmin || auth.isAdmin">
+        <router-link :to="item.link" class="full-link">
+          <div class="icon-wrapper" v-html="icons[item.icon]"></div>
+
+          <span class="label">
+            {{ item.label }}
+          </span>
         </router-link>
       </li>
     </ul>
-  </div>
+  </nav>
 </template>
 
 <style scoped>
 .sidebar {
-  width: 12%;
-  transition: width 0.3s ease;
-  overflow: hidden;
+  width: 220px;
   min-height: 100vh;
-}
-
-.sidebar.open {
-  width: 18%;
-}
-
-.icon-wrapper {
-  width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.icon-wrapper.open {
-  margin-left: 10px;
-}
-
-.icon-wrapper :deep(svg) {
-  width: 24px;
-  height: 24px;
+  background: white;
+  border-right: 1px solid #ececec;
+  transition: all 0.3s ease;
 }
 
 .menu {
   list-style: none;
-  padding: 0;
+  padding: 12px 0;
+  margin: 0;
+
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
-
-.menu li {
-  display: flex;
-  align-items: center;
-  border-radius: 12px;
-  margin: 10px 0 0 0;
-  width: 90%;
-}
-
-.menu li.open {
-  justify-content: flex-start;
-}
-.menu li:hover {
-  background-color: #eae8e2;
-}
-
-a.full-link {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  text-decoration: none;
-  color: inherit;
-  padding: 0.75rem 1rem;
   gap: 8px;
 }
 
-.icon-wrapper {
-  flex-shrink: 0;
-  width: 36px;
-  height: 36px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #264653;
+.menu li {
+  width: 100%;
 }
 
-.icon-wrapper.open {
-  margin-left: 10px;
+.full-link {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+
+  text-decoration: none;
+  color: #264653;
+
+  padding: 12px 16px;
+  margin: 0 10px;
+
+  border-radius: 14px;
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
+
+.full-link:hover {
+  background: #eae8e2;
+}
+
+.icon-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  min-width: 36px;
+  width: 36px;
+  height: 36px;
+}
+
 .icon-wrapper :deep(svg) {
   width: 24px;
   height: 24px;
 }
 
-.full-link span {
+.label {
   white-space: nowrap;
+  font-size: 15px;
 }
 
-.menu .router-link-active,
-.menu .router-link-exact-active {
+.router-link-active .router-link-exact-active {
   background: #d7ead5;
-  border-radius: 14px;
+}
+
+@media (max-width: 1024px) {
+  .sidebar {
+    width: 72px;
+  }
+
+  .label {
+    display: none;
+  }
+
+  .full-link {
+    justify-content: center;
+    margin: 0 6px;
+  }
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    position: fixed;
+
+    bottom: 0;
+    left: 0;
+
+    width: 100%;
+    min-height: auto;
+    height: 72px;
+
+    border-right: none;
+    border-top: 1px solid #ececec;
+
+    background: white;
+
+    z-index: 1000;
+  }
+
+  .menu {
+    flex-direction: row;
+    justify-content: space-around;
+    align-items: center;
+
+    height: 100%;
+
+    padding: 0;
+    gap: 0;
+  }
+
+  .menu li {
+    width: auto;
+    flex: 1;
+  }
+
+  .full-link {
+    height: 100%;
+    margin: 0;
+    border-radius: 0;
+
+    justify-content: center;
+    align-items: center;
+  }
+
+  .label {
+    display: none;
+  }
+
+  .icon-wrapper {
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+  }
+
+  .icon-wrapper :deep(svg) {
+    width: 24px;
+    height: 24px;
+  }
+
+  .router-link-active,
+  .router-link-exact-active {
+    background: #d7ead5;
+  }
 }
 </style>
