@@ -60,7 +60,7 @@ watch(
     if (!element) return
 
     observer = new IntersectionObserver(
-      async ([entry]) => {
+      async ([entry]: any) => {
         if (!entry.isIntersecting || !hasNextPage.value || isFetchingNextPage.value) {
           return
         }

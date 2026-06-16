@@ -110,7 +110,7 @@ const groupedTags = computed(() => {
   })
 })
 
-const onFileChange = (e) => {
+const onFileChange = (e: any) => {
   file.value = e.target.files[0]
 }
 
@@ -205,7 +205,7 @@ const { mutate: updateExercise } = useMutation({
       (item) => !exerciseOneData.value.categoryIds.includes(item),
     )
     const deleteDiff = exerciseOneData.value.categoryIds.filter(
-      (item) => !selectedIdsTag.value.includes(item),
+      (item: any) => !selectedIdsTag.value.includes(item),
     )
     for (const tag of createDiff) {
       addTag({
